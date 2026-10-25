@@ -3,11 +3,10 @@ import { Page, Contact, Deal, Task, User } from './types';
 import { initialContacts, initialDeals, initialTasks } from './data';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
-import Contacts from './components/Contacts';
 import Deals from './components/Deals';
-import Tasks from './components/Tasks';
+import TasksAndContacts from './components/TasksAndContacts';
 import Auth from './components/Auth';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -17,7 +16,6 @@ export default function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Load user from localStorage on mount
   useEffect(() => {
     const savedUser = localStorage.getItem('crm_user');
     if (savedUser) {
@@ -41,7 +39,6 @@ export default function App() {
     }
   };
 
-  // If not authenticated, show Auth screen
   if (!user) {
     return <Auth onAuth={handleAuth} />;
   }
@@ -50,12 +47,15 @@ export default function App() {
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard contacts={contacts} deals={deals} tasks={tasks} />;
-      case 'contacts':
-        return <Contacts contacts={contacts} setContacts={setContacts} />;
+      case 'tasks':
+        return <TasksAndContacts
+          tasks={tasks}
+          setTasks={setTasks}
+          contacts={contacts}
+          setContacts={setContacts}
+        />;
       case 'deals':
         return <Deals deals={deals} setDeals={setDeals} />;
-      case 'tasks':
-        return <Tasks tasks={tasks} setTasks={setTasks} />;
       default:
         return <Dashboard contacts={contacts} deals={deals} tasks={tasks} />;
     }
@@ -63,7 +63,6 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-slate-100">
-      {/* Mobile sidebar toggle */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900 text-white rounded-lg shadow-lg"
@@ -71,7 +70,6 @@ export default function App() {
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:relative lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
@@ -81,7 +79,6 @@ export default function App() {
         }} user={user} onLogout={handleLogout} />
       </div>
 
-      {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
@@ -89,7 +86,6 @@ export default function App() {
         />
       )}
 
-      {/* Main Content */}
       <main className="flex-1 overflow-auto">
         {renderPage()}
       </main>

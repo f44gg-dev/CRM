@@ -43,4 +43,4 @@ export interface User {
   createdAt: string;
 }
 
-export type Page = 'dashboard' | 'contacts' | 'deals' | 'tasks';
+export type Page = 'dashboard' | 'tasks' | 'deals';

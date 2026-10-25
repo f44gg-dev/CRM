@@ -11,9 +11,8 @@ interface SidebarProps {
 
 const menuItems: { page: Page; label: string; icon: React.ReactNode }[] = [
   { page: 'dashboard', label: 'Дашборд', icon: <LayoutDashboard size={20} /> },
-  { page: 'contacts', label: 'Контакты', icon: <Users size={20} /> },
+  { page: 'tasks', label: 'Задачи и Клиенты', icon: <CheckSquare size={20} /> },
   { page: 'deals', label: 'Сделки', icon: <Briefcase size={20} /> },
-  { page: 'tasks', label: 'Задачи', icon: <CheckSquare size={20} /> },
 ];
 
 export default function Sidebar({ currentPage, onPageChange, user, onLogout }: SidebarProps) {
