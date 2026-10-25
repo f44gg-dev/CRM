@@ -1,10 +1,12 @@
 import React from 'react';
-import { Page } from '../types';
-import { LayoutDashboard, Users, Briefcase, CheckSquare, ChevronRight } from 'lucide-react';
+import { Page, User } from '../types';
+import { LayoutDashboard, Users, Briefcase, CheckSquare, ChevronRight, LogOut } from 'lucide-react';
 
 interface SidebarProps {
   currentPage: Page;
   onPageChange: (page: Page) => void;
+  user: User;
+  onLogout: () => void;
 }
 
 const menuItems: { page: Page; label: string; icon: React.ReactNode }[] = [
@@ -14,7 +16,7 @@ const menuItems: { page: Page; label: string; icon: React.ReactNode }[] = [
   { page: 'tasks', label: 'Задачи', icon: <CheckSquare size={20} /> },
 ];
 
-export default function Sidebar({ currentPage, onPageChange }: SidebarProps) {
+export default function Sidebar({ currentPage, onPageChange, user, onLogout }: SidebarProps) {
   return (
     <aside className="w-64 bg-slate-900 text-white flex flex-col min-h-screen">
       <div className="p-6 border-b border-slate-700">
@@ -47,13 +49,20 @@ export default function Sidebar({ currentPage, onPageChange }: SidebarProps) {
 
       <div className="p-4 border-t border-slate-700">
         <div className="flex items-center gap-3 px-4 py-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-sm font-bold">
-            А
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm font-bold shrink-0">
+            {user.name.charAt(0).toUpperCase()}
           </div>
-          <div>
-            <p className="text-sm font-medium">Администратор</p>
-            <p className="text-xs text-slate-400">admin@crmpro.ru</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">{user.name}</p>
+            <p className="text-xs text-slate-400 truncate">{user.company}</p>
           </div>
+          <button
+            onClick={onLogout}
+            className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+            title="Выйти"
+          >
+            <LogOut size={16} />
+          </button>
         </div>
       </div>
     </aside>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Task } from '../types';
-import { Plus, X, Calendar, Flag, User, CheckCircle2, Circle, Clock, Filter } from 'lucide-react';
+import { Plus, X, Calendar, Flag, User, CheckCircle2, Circle, Clock, Filter, Phone, Building2 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface TasksProps {
@@ -14,7 +14,8 @@ export default function Tasks({ tasks, setTasks }: TasksProps) {
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [formData, setFormData] = useState({
     title: '', description: '', priority: 'medium' as Task['priority'],
-    status: 'pending' as Task['status'], dueDate: '', assignee: '', relatedTo: ''
+    status: 'pending' as Task['status'], dueDate: '', assignee: '', relatedTo: '',
+    customerName: '', customerContact: ''
   });
 
   const filteredTasks = tasks.filter(task => {
@@ -68,7 +69,7 @@ export default function Tasks({ tasks, setTasks }: TasksProps) {
     };
     setTasks(prev => [...prev, newTask]);
     setShowModal(false);
-    setFormData({ title: '', description: '', priority: 'medium', status: 'pending', dueDate: '', assignee: '', relatedTo: '' });
+    setFormData({ title: '', description: '', priority: 'medium', status: 'pending', dueDate: '', assignee: '', relatedTo: '', customerName: '', customerContact: '' });
   };
 
   const handleDeleteTask = (id: string) => {
@@ -223,6 +224,26 @@ export default function Tasks({ tasks, setTasks }: TasksProps) {
                       </span>
                     )}
                   </div>
+
+                  {/* Customer Info */}
+                  {(task.customerName || task.customerContact) && (
+                    <div className="mt-3 pt-3 border-t border-slate-100">
+                      <div className="flex flex-wrap items-center gap-3">
+                        {task.customerName && (
+                          <span className="flex items-center gap-1.5 text-xs text-slate-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                            <Building2 size={12} className="text-amber-600" />
+                            <span className="font-medium">Заказчик:</span> {task.customerName}
+                          </span>
+                        )}
+                        {task.customerContact && (
+                          <span className="flex items-center gap-1.5 text-xs text-slate-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                            <Phone size={12} className="text-emerald-600" />
+                            {task.customerContact}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -239,7 +260,7 @@ export default function Tasks({ tasks, setTasks }: TasksProps) {
       {/* Add Task Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-slate-200">
               <h3 className="text-lg font-semibold text-slate-800">Новая задача</h3>
               <button onClick={() => setShowModal(false)} className="p-2 hover:bg-slate-100 rounded-lg">
@@ -267,6 +288,35 @@ export default function Tasks({ tasks, setTasks }: TasksProps) {
                   placeholder="Подробное описание задачи..."
                 />
               </div>
+
+              {/* Customer Section */}
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
+                <h4 className="text-sm font-semibold text-amber-800 flex items-center gap-2">
+                  <Building2 size={16} />
+                  Информация о заказчике
+                </h4>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">ФИО заказчика</label>
+                  <input
+                    type="text"
+                    value={formData.customerName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customerName: e.target.value }))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    placeholder="Иванов Иван Иванович"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Контакты заказчика</label>
+                  <input
+                    type="text"
+                    value={formData.customerContact}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customerContact: e.target.value }))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    placeholder="+7 (999) 123-45-67 или email"
+                  />
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Приоритет</label>

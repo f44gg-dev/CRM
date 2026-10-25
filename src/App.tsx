@@ -1,19 +1,50 @@
-import React, { useState } from 'react';
-import { Page, Contact, Deal, Task } from './types';
+import React, { useState, useEffect } from 'react';
+import { Page, Contact, Deal, Task, User } from './types';
 import { initialContacts, initialDeals, initialTasks } from './data';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Contacts from './components/Contacts';
 import Deals from './components/Deals';
 import Tasks from './components/Tasks';
-import { Menu, X } from 'lucide-react';
+import Auth from './components/Auth';
+import { Menu, X, LogOut } from 'lucide-react';
 
 export default function App() {
+  const [user, setUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [contacts, setContacts] = useState<Contact[]>(initialContacts);
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const savedUser = localStorage.getItem('crm_user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch {
+        localStorage.removeItem('crm_user');
+      }
+    }
+  }, []);
+
+  const handleAuth = (newUser: User) => {
+    setUser(newUser);
+    localStorage.setItem('crm_user', JSON.stringify(newUser));
+  };
+
+  const handleLogout = () => {
+    if (confirm('Выйти из системы?')) {
+      localStorage.removeItem('crm_user');
+      setUser(null);
+    }
+  };
+
+  // If not authenticated, show Auth screen
+  if (!user) {
+    return <Auth onAuth={handleAuth} />;
+  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -47,7 +78,7 @@ export default function App() {
         <Sidebar currentPage={currentPage} onPageChange={(page) => {
           setCurrentPage(page);
           setSidebarOpen(false);
-        }} />
+        }} user={user} onLogout={handleLogout} />
       </div>
 
       {/* Overlay for mobile */}

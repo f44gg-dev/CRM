@@ -23,10 +23,10 @@ export const initialDeals: Deal[] = [
 ];
 
 export const initialTasks: Task[] = [
-  { id: '1', title: 'Подготовить коммерческое предложение', description: 'Составить КП для ТехноСофт по внедрению CRM', priority: 'high', status: 'in_progress', dueDate: '2024-05-20', assignee: 'Менеджер', relatedTo: 'Внедрение CRM' },
-  { id: '2', title: 'Позвонить Марии', description: 'Обсудить детали проекта по разработке сайта', priority: 'medium', status: 'pending', dueDate: '2024-05-18', assignee: 'Менеджер', relatedTo: 'Разработка сайта' },
-  { id: '3', title: 'Отправить счёт', description: 'Выставить счёт за SEO-продвижение', priority: 'high', status: 'completed', dueDate: '2024-04-10', assignee: 'Бухгалтерия', relatedTo: 'SEO-продвижение' },
-  { id: '4', title: 'Встреча с Энтерпрайз', description: 'Презентация результатов аудита', priority: 'high', status: 'pending', dueDate: '2024-05-25', assignee: 'Менеджер', relatedTo: 'Аудит безопасности' },
+  { id: '1', title: 'Подготовить коммерческое предложение', description: 'Составить КП для ТехноСофт по внедрению CRM', priority: 'high', status: 'in_progress', dueDate: '2024-05-20', assignee: 'Менеджер', relatedTo: 'Внедрение CRM', customerName: 'Алексей Петров', customerContact: '+7 (999) 123-45-67' },
+  { id: '2', title: 'Позвонить Марии', description: 'Обсудить детали проекта по разработке сайта', priority: 'medium', status: 'pending', dueDate: '2024-05-18', assignee: 'Менеджер', relatedTo: 'Разработка сайта', customerName: 'Мария Иванова', customerContact: '+7 (916) 234-56-78' },
+  { id: '3', title: 'Отправить счёт', description: 'Выставить счёт за SEO-продвижение', priority: 'high', status: 'completed', dueDate: '2024-04-10', assignee: 'Бухгалтерия', relatedTo: 'SEO-продвижение', customerName: 'Елена Смирнова', customerContact: '+7 (925) 456-78-90' },
+  { id: '4', title: 'Встреча с Энтерпрайз', description: 'Презентация результатов аудита', priority: 'high', status: 'pending', dueDate: '2024-05-25', assignee: 'Менеджер', relatedTo: 'Аудит безопасности', customerName: 'Дмитрий Козлов', customerContact: '+7 (903) 345-67-89' },
   { id: '5', title: 'Обновить портфолио', description: 'Добавить новые кейсы на сайт', priority: 'low', status: 'pending', dueDate: '2024-06-01', assignee: 'Маркетолог' },
-  { id: '6', title: 'Демо для ИнноваТех', description: 'Подготовить демо-версию интеграции API', priority: 'medium', status: 'in_progress', dueDate: '2024-05-22', assignee: 'Разработчик', relatedTo: 'Интеграция API' },
+  { id: '6', title: 'Демо для ИнноваТех', description: 'Подготовить демо-версию интеграции API', priority: 'medium', status: 'in_progress', dueDate: '2024-05-22', assignee: 'Разработчик', relatedTo: 'Интеграция API', customerName: 'Сергей Волков', customerContact: '+7 (977) 567-89-01' },
 ];

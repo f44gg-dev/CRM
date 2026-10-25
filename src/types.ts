@@ -29,6 +29,18 @@ export interface Task {
   dueDate: string;
   assignee: string;
   relatedTo?: string;
+  customerName?: string;
+  customerContact?: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  company: string;
+  position: string;
+  createdAt: string;
 }
 
 export type Page = 'dashboard' | 'contacts' | 'deals' | 'tasks';
