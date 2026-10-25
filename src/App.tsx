@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Page, Contact, Deal, Task, User } from './types';
 import { initialContacts, initialDeals, initialTasks } from './data';
+import { saveToStorage, loadFromStorage, STORAGE_KEYS } from './utils/storage';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Deals from './components/Deals';
@@ -11,31 +12,62 @@ import { Menu, X } from 'lucide-react';
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
-  const [contacts, setContacts] = useState<Contact[]>(initialContacts);
-  const [deals, setDeals] = useState<Deal[]>(initialDeals);
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [deals, setDeals] = useState<Deal[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
+  // Загрузка данных при старте приложения
   useEffect(() => {
-    const savedUser = localStorage.getItem('crm_user');
+    // Загружаем пользователя
+    const savedUser = loadFromStorage<User>(STORAGE_KEYS.USER);
     if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch {
-        localStorage.removeItem('crm_user');
-      }
+      setUser(savedUser);
     }
+
+    // Загружаем данные или используем начальные
+    const savedContacts = loadFromStorage<Contact[]>(STORAGE_KEYS.CONTACTS);
+    const savedDeals = loadFromStorage<Deal[]>(STORAGE_KEYS.DEALS);
+    const savedTasks = loadFromStorage<Task[]>(STORAGE_KEYS.TASKS);
+
+    setContacts(savedContacts || initialContacts);
+    setDeals(savedDeals || initialDeals);
+    setTasks(savedTasks || initialTasks);
+    setIsLoaded(true);
   }, []);
+
+  // Автосохранение контактов при изменении
+  useEffect(() => {
+    if (isLoaded && contacts.length > 0) {
+      saveToStorage(STORAGE_KEYS.CONTACTS, contacts);
+    }
+  }, [contacts, isLoaded]);
+
+  // Автосохранение сделок при изменении
+  useEffect(() => {
+    if (isLoaded && deals.length > 0) {
+      saveToStorage(STORAGE_KEYS.DEALS, deals);
+    }
+  }, [deals, isLoaded]);
+
+  // Автосохранение задач при изменении
+  useEffect(() => {
+    if (isLoaded && tasks.length > 0) {
+      saveToStorage(STORAGE_KEYS.TASKS, tasks);
+    }
+  }, [tasks, isLoaded]);
 
   const handleAuth = (newUser: User) => {
     setUser(newUser);
-    localStorage.setItem('crm_user', JSON.stringify(newUser));
+    saveToStorage(STORAGE_KEYS.USER, newUser);
   };
 
   const handleLogout = () => {
     if (confirm('Выйти из системы?')) {
-      localStorage.removeItem('crm_user');
+      localStorage.removeItem(STORAGE_KEYS.USER);
       setUser(null);
+      // Данные контактов/задач/сделок остаются для следующего входа
     }
   };
 

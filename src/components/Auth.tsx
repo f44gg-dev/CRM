@@ -63,6 +63,8 @@ export default function Auth({ onAuth }: AuthProps) {
       position: position.trim() || 'Сотрудник',
       createdAt: new Date().toISOString(),
     };
+    
+    // Сохранение пользователя через onAuth (App.tsx отвечает за localStorage)
     onAuth(user);
   };
 
