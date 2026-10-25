@@ -1,0 +1,20 @@
+{
+  "name": "CRM Pro - Система управления клиентами",
+  "short_name": "CRM Pro",
+  "description": "Современная CRM система для управления клиентами, задачами и сделками",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "ru"
+}
