@@ -43,4 +43,12 @@ export interface User {
   createdAt: string;
 }
 
-export type Page = 'dashboard' | 'tasks' | 'deals';
+export type Page = 'dashboard' | 'tasks' | 'deals' | 'documents';
+
+export interface DocumentTemplate {
+  id: string;
+  name: string;
+  type: 'contract' | 'act' | 'combined';
+  content: string;
+  createdAt: string;
+}

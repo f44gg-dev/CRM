@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Deals from './components/Deals';
 import TasksAndContacts from './components/TasksAndContacts';
+import Documents from './components/Documents';
 import Auth from './components/Auth';
 import Settings from './components/Settings';
 import { Menu, X, Settings as SettingsIcon } from 'lucide-react';
@@ -85,6 +86,8 @@ export default function App() {
         />;
       case 'deals':
         return <Deals deals={deals} setDeals={setDeals} />;
+      case 'documents':
+        return <Documents />;
       default:
         return <Dashboard contacts={contacts} deals={deals} tasks={tasks} />;
     }

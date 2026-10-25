@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page, User } from '../types';
-import { LayoutDashboard, Users, Briefcase, CheckSquare, ChevronRight, LogOut } from 'lucide-react';
+import { LayoutDashboard, Briefcase, CheckSquare, ChevronRight, LogOut, FileText } from 'lucide-react';
 
 interface SidebarProps {
   currentPage: Page;
@@ -13,6 +13,7 @@ const menuItems: { page: Page; label: string; icon: React.ReactNode }[] = [
   { page: 'dashboard', label: 'Дашборд', icon: <LayoutDashboard size={20} /> },
   { page: 'tasks', label: 'Задачи и Клиенты', icon: <CheckSquare size={20} /> },
   { page: 'deals', label: 'Сделки', icon: <Briefcase size={20} /> },
+  { page: 'documents', label: 'Документы', icon: <FileText size={20} /> },
 ];
 
 export default function Sidebar({ currentPage, onPageChange, user, onLogout }: SidebarProps) {

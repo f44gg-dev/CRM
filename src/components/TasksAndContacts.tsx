@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Task, Contact } from '../types';
 import {
   Plus, X, Calendar, Flag, User, CheckCircle2, Circle, Clock,
-  Filter, Phone, Mail, Building2, Search, Edit2, Trash2, MoreVertical
+  Filter, Phone, Mail, Building2, Search, Edit2, Trash2, Printer
 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
+import PrintDocument from './PrintDocument';
 
 interface TasksProps {
   tasks: Task[];
@@ -22,6 +23,7 @@ export default function TasksAndContacts({ tasks, setTasks, contacts, setContact
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [expandedTask, setExpandedTask] = useState<string | null>(null);
+  const [printingTask, setPrintingTask] = useState<Task | null>(null);
 
   const [taskForm, setTaskForm] = useState({
     title: '', description: '', priority: 'medium' as Task['priority'],
@@ -330,6 +332,13 @@ export default function TasksAndContacts({ tasks, setTasks, contacts, setContact
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
                         <button
+                          onClick={() => setPrintingTask(task)}
+                          className="p-1.5 text-slate-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                          title="Печать договора/акта"
+                        >
+                          <Printer size={16} />
+                        </button>
+                        <button
                           onClick={() => openEditTask(task)}
                           className="p-1.5 text-slate-400 hover:text-blue-500 rounded-lg hover:bg-blue-50 transition-colors"
                           title="Редактировать"
@@ -603,6 +612,14 @@ export default function TasksAndContacts({ tasks, setTasks, contacts, setContact
             </div>
           </div>
         </div>
+      )}
+
+      {/* Print Document Modal */}
+      {printingTask && (
+        <PrintDocument
+          task={printingTask}
+          onClose={() => setPrintingTask(null)}
+        />
       )}
 
       {/* Contact Modal */}
