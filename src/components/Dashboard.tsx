@@ -39,10 +39,10 @@ export default function Dashboard({ contacts, deals, tasks }: DashboardProps) {
   };
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8">
       <div>
-        <h2 className="text-3xl font-bold text-slate-800">Дашборд</h2>
-        <p className="text-slate-500 mt-1">Обзор ключевых показателей</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Дашборд</h2>
+        <p className="text-slate-500 mt-1 text-sm sm:text-base">Обзор ключевых показателей</p>
       </div>
 
       {/* KPI Cards */}

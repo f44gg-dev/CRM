@@ -7,7 +7,8 @@ import Dashboard from './components/Dashboard';
 import Deals from './components/Deals';
 import TasksAndContacts from './components/TasksAndContacts';
 import Auth from './components/Auth';
-import { Menu, X } from 'lucide-react';
+import Settings from './components/Settings';
+import { Menu, X, Settings as SettingsIcon } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -16,17 +17,16 @@ export default function App() {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Загрузка данных при старте приложения
   useEffect(() => {
-    // Загружаем пользователя
     const savedUser = loadFromStorage<User>(STORAGE_KEYS.USER);
     if (savedUser) {
       setUser(savedUser);
     }
 
-    // Загружаем данные или используем начальные
     const savedContacts = loadFromStorage<Contact[]>(STORAGE_KEYS.CONTACTS);
     const savedDeals = loadFromStorage<Deal[]>(STORAGE_KEYS.DEALS);
     const savedTasks = loadFromStorage<Task[]>(STORAGE_KEYS.TASKS);
@@ -37,23 +37,21 @@ export default function App() {
     setIsLoaded(true);
   }, []);
 
-  // Автосохранение контактов при изменении
+  // Автосохранение при изменении
   useEffect(() => {
-    if (isLoaded && contacts.length > 0) {
+    if (isLoaded && contacts.length >= 0) {
       saveToStorage(STORAGE_KEYS.CONTACTS, contacts);
     }
   }, [contacts, isLoaded]);
 
-  // Автосохранение сделок при изменении
   useEffect(() => {
-    if (isLoaded && deals.length > 0) {
+    if (isLoaded && deals.length >= 0) {
       saveToStorage(STORAGE_KEYS.DEALS, deals);
     }
   }, [deals, isLoaded]);
 
-  // Автосохранение задач при изменении
   useEffect(() => {
-    if (isLoaded && tasks.length > 0) {
+    if (isLoaded && tasks.length >= 0) {
       saveToStorage(STORAGE_KEYS.TASKS, tasks);
     }
   }, [tasks, isLoaded]);
@@ -67,7 +65,6 @@ export default function App() {
     if (confirm('Выйти из системы?')) {
       localStorage.removeItem(STORAGE_KEYS.USER);
       setUser(null);
-      // Данные контактов/задач/сделок остаются для следующего входа
     }
   };
 
@@ -95,14 +92,37 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-slate-100">
+      {/* Mobile header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-slate-200 z-40 flex items-center justify-between px-4">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 hover:bg-slate-100 rounded-lg"
+        >
+          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+        <h1 className="text-lg font-bold">
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">CRM</span>
+          <span className="text-slate-600 font-light">Pro</span>
+        </h1>
+        <button
+          onClick={() => setSettingsOpen(true)}
+          className="p-2 hover:bg-slate-100 rounded-lg"
+        >
+          <SettingsIcon size={20} className="text-slate-600" />
+        </button>
+      </div>
+
+      {/* Desktop settings button */}
       <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900 text-white rounded-lg shadow-lg"
+        onClick={() => setSettingsOpen(true)}
+        className="hidden lg:flex fixed top-4 right-4 z-50 p-3 bg-white hover:bg-slate-50 rounded-xl shadow-lg border border-slate-200 transition-all hover:scale-105"
+        title="Настройки и данные"
       >
-        {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        <SettingsIcon size={20} className="text-slate-600" />
       </button>
 
-      <div className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:relative lg:translate-x-0 ${
+      {/* Mobile sidebar */}
+      <div className={`lg:hidden fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <Sidebar currentPage={currentPage} onPageChange={(page) => {
@@ -111,16 +131,37 @@ export default function App() {
         }} user={user} onLogout={handleLogout} />
       </div>
 
+      {/* Desktop sidebar */}
+      <div className="hidden lg:block">
+        <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} user={user} onLogout={handleLogout} />
+      </div>
+
+      {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <main className="flex-1 overflow-auto">
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto pt-14 lg:pt-0">
         {renderPage()}
       </main>
+
+      {/* Settings Modal */}
+      {settingsOpen && (
+        <Settings
+          user={user}
+          contacts={contacts}
+          deals={deals}
+          tasks={tasks}
+          setContacts={setContacts}
+          setDeals={setDeals}
+          setTasks={setTasks}
+          onClose={() => setSettingsOpen(false)}
+        />
+      )}
     </div>
   );
 }

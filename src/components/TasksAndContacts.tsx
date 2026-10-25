@@ -185,11 +185,11 @@ export default function TasksAndContacts({ tasks, setTasks, contacts, setContact
   };
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-slate-800">Задачи и Клиенты</h2>
-          <p className="text-slate-500 mt-1">Задачи с контактами заказчиков</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Задачи и Клиенты</h2>
+          <p className="text-slate-500 mt-1 text-sm sm:text-base">Задачи с контактами заказчиков</p>
         </div>
         <div className="flex gap-2">
           <button
